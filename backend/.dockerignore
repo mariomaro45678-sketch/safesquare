@@ -1,0 +1,35 @@
+# Ignore Python cache and virtual environments
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Ignore logs and temporary files
+*.log
+*.db
+*.sqlite3
+test.db
+
+# Ignore environment files (should use docker-compose env vars)
+.env
+.env.local
+
+# Ignore development files
+.git/
+.gitignore
+README.md
+tests/
+docs/
+
+# Ignore data directories (mount as volumes instead)
+data/raw/*
+data/processed/*
+geocoding_log.txt
+*_log.txt

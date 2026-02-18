@@ -1,0 +1,138 @@
+# Casa.it Real Estate Scraper Configuration
+
+proxy_config:
+  # PRIMARY POOL (Italian rotating)
+  italian_proxy_file: "rotating_proxies_ita.md"
+  italian_proxy_priority: 1  # Always try Italian first
+
+  # BACKUP POOL (US sticky sessions)
+  us_proxy_file: "Sticky_proxies_us.md"
+  us_proxy_priority: 2  # Fallback only
+  
+  rotation_strategy: "round_robin"  # Within each pool
+  max_retries_per_proxy: 2
+  proxy_timeout: 30  # seconds
+  enable_proxy_health_check: true
+  health_check_interval: 3600  # 1 hour
+  
+  # Failover rules
+  failover_on_italian_exhausted: true  # Switch to US if all Italian fail
+  max_consecutive_italian_failures: 5  # Trigger US backup after 5 failures
+
+rate_limits:
+  casa_it_per_proxy: 1.0  # req/sec per Italian proxy (can be higher - residential)
+  total_concurrent_proxies: 10  # Match Italian proxy count
+  max_concurrent_proxies: 50  # Scale to US pool if needed
+  
+  # Human-like delays (normal distribution)
+  delay_mean_seconds: 2.0
+  delay_std_dev_seconds: 0.8
+  delay_min_seconds: 0.5
+  delay_max_seconds: 5.0
+
+target_municipalities:
+  # Top 50 Italian cities by population
+  - Roma
+  - Milano
+  - Napoli
+  - Torino
+  - Palermo
+  - Genova
+  - Bologna
+  - Firenze
+  - Bari
+  - Catania
+  - Venezia
+  - Verona
+  - Messina
+  - Padova
+  - Trieste
+  - Taranto
+  - Brescia
+  - Parma
+  - Prato
+  - Modena
+  - Reggio Calabria
+  - Reggio Emilia
+  - Perugia
+  - Livorno
+  - Ravenna
+  - Cagliari
+  - Foggia
+  - Rimini
+  - Salerno
+  - Ferrara
+  - Sassari
+  - Latina
+  - Giugliano in Campania
+  - Monza
+  - Siracusa
+  - Pescara
+  - Bergamo
+  - Forlì
+  - Trento
+  - Vicenza
+  - Terni
+  - Bolzano
+  - Novara
+  - Piacenza
+  - Ancona
+  - Andria
+  - Arezzo
+  - Udine
+  - Cesena
+  - Lecce
+
+search_params:
+  property_type: "residenziale"
+  listing_type: "vendita"
+  max_price: 1000000
+  max_pages_per_city: 9  # Respect robots.txt limit
+  
+  # Smart sampling
+  priority_cities_min_listings: 100  # Scrape up to 100 for major cities
+  standard_cities_min_listings: 50   # Scrape up to 50 for medium cities  
+  small_towns_min_listings: 20       # Scrape up to 20 for small towns
+
+anti_detection:
+  user_agents:
+    - "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    - "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
+    - "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+  
+  accept_languages:
+    - "it-IT,it;q=0.9,en-US;q=0.8,en;q=0.7"
+    - "it-IT,it;q=0.9,en;q=0.8"
+    - "it,en-US;q=0.9,en;q=0.8"
+  
+  referers:
+    - "https://www.google.com/"
+    - "https://www.google.it/"
+    - "https://www.google.it/search?q=case+in+vendita"
+  
+  # Behavioral randomization
+  skip_listing_probability: 0.15  # 15% chance to skip a listing
+  visit_about_page_probability: 0.10  # 10% chance to visit non-target pages
+  random_pagination_stop: true  # Don't always scrape all 9 pages
+
+scheduling:
+  full_scrape_interval: "24h"
+  incremental_interval: "6h"
+  
+  # Mimic business hours (Italian timezone)
+  scrape_start_hour: 9   # 9 AM CET
+  scrape_end_hour: 23    # 11 PM CET
+  
+  # Checkpoint for fault tolerance
+  enable_checkpoints: true
+  checkpoint_interval_requests: 100  # Save progress every 100 requests
+
+logging:
+  log_level: "INFO"
+  log_file: "logs/scraper_casa.log"
+  log_format: "%(asctime)s - %(name)s - [%(proxy_session)s] - %(levelname)s - %(message)s"
+  
+  # Separate logs for monitoring
+  success_log: "logs/scraper_success.log"
+  error_log: "logs/scraper_errors.log"
+  proxy_performance_log: "logs/proxy_performance.log"

@@ -1,0 +1,185 @@
+# 🏁 MASTER TASKS
+
+## PHASE 1: MVP - BACKEND (COMPLETED)
+- [x] STEP 1: PROJECT SETUP & ENVIRONMENT CONFIGURATION
+- [x] STEP 2: DATABASE SCHEMA DESIGN & MODELS
+- [x] STEP 3: DATA PIPELINE ARCHITECTURE
+- [x] STEP 4: API ENDPOINTS IMPLEMENTATION
+- [x] STEP 5: API VERIFICATION & POLISHING
+
+## PHASE 2: FRONTEND INTEGRATION (CURRENT)
+- [x] STEP 8: FRONTEND FOUNDATION
+    - [x] 8.1 Configure React Application Structure (App.js, Routing)
+    - [x] 8.2 Create API Service Layer (Axios instance, endpoints)
+    - [x] 8.3 Configure Formatters and Utils
+- [x] STEP 9: LAYOUT COMPONENTS
+    - [x] 9.1 Create Header and Footer
+    - [x] 9.2 Create Loading and Error Components
+- [x] STEP 10: MAP INTEGRATION
+    - [x] 10.1 Create Base Map Component (Leaflet)
+    - [x] 10.2 Implement Score-based Markers
+- [x] STEP 11: SEARCH & DASHBOARD
+    - [x] 11.1 Implement Search Functionality
+    - [x] 11.2 Build Municipality Dashboard
+    - [x] 11.3 Integrate Charts and Visualizations
+- [x] STEP 13: PAGE IMPLEMENTATIONS (5B)
+    - [x] 13.1 Home Page
+        - [x] Implement Hero Section with SearchBar & Quick Stats
+        - [x] Build Features Grid (Trends, Risks, climate, Demographics)
+        - [x] Integrate PropertyMap for major cities (>100k pop)
+        - [x] Implement CTA navigations and loading/error states
+    - [x] 13.2 Search Page
+        - [x] Build Layout with Sidebar (Results) and Map (Visuals)
+        - [x] Handle search state with `locationAPI.search`
+        - [x] Implement interactive result-to-map synchronization
+        - [x] Add loading skeletons and empty states
+    - [x] 13.3 Property Details Page
+        - [x] Implement Multi-API Data Aggregator (`Promise.allSettled`)
+        - [x] Build Investment Score Dashboard (ScoreCard + Category)
+        - [x] Create Stats Summary Grid (Price, Yield, Pop, Income)
+        - [x] Map Risk Assessment Badges (Seismic, Flood, Landslide, Climate)
+        - [x] Integrate 4 Chart Suite (Trend, Radar, Comparison, Demographics)
+        - [x] Display Strengths/Risks lists and Location Map
+    - [x] 13.4 About Page
+        - [x] Implement Mission, Offerings, and Data Sources
+        - [x] Add Legal Disclaimer and Footer integration
+
+## PHASE 3: REFINEMENT & DEPLOYMENT (6)
+- [x] STEP 14: TESTING STRATEGY
+    - [x] 14.1 Backend Testing (pytest)
+        - [x] Configure `backend/tests/conftest.py` with SQLAlchemy Test DB setup
+        - [x] Write integration tests for Locations API (`backend/tests/test_api_locations.py`)
+        - [x] Write unit tests for ScoringEngine logic (`backend/tests/test_scoring_engine.py`)
+        - [x] Implement data ingestion validation tests (`backend/tests/test_data_ingestion.py`)
+        - [x] Run backend test suite with coverage reporting
+    - [x] 14.2 Frontend Testing (RTL/Jest)
+        - [x] Implement unit tests for utility formatters (`frontend/src/utils/__tests__/formatters.test.js`)
+        - [x] Write component tests for `SearchBar` and `StatCard`
+        - [x] Test API service layer using Axios mocks
+        - [x] Verify page rendering for Home and Search flows
+- [x] Transition to Docker Environment
+    - [x] Stop current local execution environments
+    - [x] Run `docker-compose up --build -d`
+    - [x] Verify platform accessibility at http://localhost
+- [x] STEP 15: DOCKER CONTAINERIZATION
+    - [x] 15.1 Dockerize Backend Environment
+        - [x] Create production-ready `backend/Dockerfile` using `python:3.11-slim`
+        - [x] Add `.dockerignore` to exclude venv, pycache, and logs
+    - [x] 15.2 Dockerize Frontend (Multi-stage)
+        - [x] Create `frontend/Dockerfile` with Nginx production stage
+        - [x] Configure `frontend/nginx.conf` for SPA routing and Gzip compression
+    - [x] 15.3 System Orchestration
+        - [x] Author root-level `docker-compose.yml` (PostGIS, Backend, Frontend)
+        - [x] Define container healthchecks and link dependencies
+        - [x] Create `.env.example` for production-grade environment variables
+- [x] STEP 16: PRODUCTION READINESS (LOCAL Focus)
+    - [x] 16.1 Security Hardening
+        - [x] Configure `CORS` middleware with robust security settings
+        - [x] Implement secure `SECRET_KEY` management and environment validation
+    - [x] 16.2 Monitoring & Health
+        - [x] Implement rotating file logging handlers in backend
+        - [x] Add detailed `/api/v1/health` endpoint for DB and System status
+    - [x] 16.3 Final local E2E Verification
+        - [x] Execute full service startup and verification
+        - [x] Perform manual test across all pages (Search -> Details journey verified)
+        - [x] Fix NaN/Empty field data mismatches (Verified)
+- [ ] STEP 17: DEPLOYMENT (On Hold)
+    - [ ] 17.1 AWS/Terraform configurations
+    - [ ] 17.2 CI/CD Pipeline setup
+
+## PHASE 4: DATA EXPANSION & INTELLIGENCE (IN PROGRESS)
+- [x] STEP 18: ENVIRONMENTAL & QUALITY OF LIFE DATA
+    - [x] 18.1 Source and process ISPRA Air Quality datasets (PM10, PM2.5, NO2)
+        - [x] Create unified ingestion script `ingest_regional_air_quality.py`
+    - [x] 18.2 Implement `mapping_comuni_arpa.json` using distance-based logic
+        - [x] Integrate weighted mapping for Lombardia
+        - [x] Implement ISTAT-based mapping for Lazio
+        - [x] Implement coordinate-based mapping for Veneto and Emilia
+        - [x] Implement name-based fallback for Campania
+    - [x] 18.3 Integrate Copernicus 10km grid climate projections
+    - [x] 18.4 Source granular (Neighborhood-level) crime reports for Major Cities
+- [x] STEP 19: SCORING ENGINE OPTIMIZATION
+    - [x] 19.1 Fix `NameError` and optimize transaction batching in `batch_calculate_scores.py` (Verified)
+    - [x] 19.2 Refactor ScoringEngine to use Percentile-based (Z-Score) distribution (Verified)
+    - [x] 19.3 Implement scoring sensitivity for small data deltas (Contrast Enhancement 3.0x)
+    - [/] 19.4 Add "Connectivity" and "Environmental Quality" score dimensions (In Progress)
+
+## PHASE 5: ADVANCED CONNECTIVITY & INFRASTRUCTURE
+- [x] STEP 20: TRANSPORT DATA INGESTION
+    - [x] 20.1 Ingest OSM Train Stations and Highway Exits (Italy-wide)
+    - [x] 20.2 Calculate Haversine/PostGIS distances for all municipalities
+- [x] STEP 21: UI INTEGRATION
+    - [x] 21.1 Add Connectivity Insight Cards to Property Details
+    - [x] 21.2 Expose distance metrics in Location API
+- [x] STEP 22: SERVICES & AMENITIES
+    - [x] 22.1 Create generic `ServiceNode` model for Healthcare/Education/Retail
+    - [x] 22.2 Implement Overpass ingestor for Hospitals and Schools (Running in background)
+    - [x] 22.3 Calculate Amenity Density Index per municipality (Script ready)
+- [x] STEP 23: DIGITAL CONNECTIVITY
+    - [x] 23.1 DB Update: Add `mobile_tower_count` and `broadband_ftth_coverage`
+    - [x] 23.2 Ingest Mobile Towers (Overpass API)
+    - [x] 23.3 Ingest Broadband Data (AGCOM CSV)
+    - [x] 23.4 Update Scoring Engine (Max 10% weight)
+
+## PHASE 6: DATA DEPTH & INTELLIGENCE (PLANNED)
+- [x] STEP 24: RENTAL MARKET DATA (CRITICAL)
+    - [x] 24.1 Research OMI Rental Quote availability (Data Missing in current file)
+    - [x] 24.2 Ingest Rental Prices (Implemented "Silver Tier" - 103 Capitals Ingested)
+    - [x] 24.3 Implement true `rental_yield` calculation (Smart Derived Model Active)
+    - [x] 24.4 Expand to Granular Rental Ingestion (Implemented Elasticity-based Prediction Model - 100% Coverage)
+- [x] STEP 25: GRANULAR CRIME DATA
+    - [x] 25.1 Research City-specific Police Open Data (Rome/Milan)
+    - [x] 25.2 Scrape/Ingest Neighborhood-level crime stats (Rome Municipi / Milan NIL)
+    - [x] 25.3 Link `CrimeStatistics` to `OMI` Zones (Fuzzy Matching Implemented)
+- [ ] STEP 26: DETAILED SEISMIC/FLOOD DATA
+    - [x] 26.1 Locate INGV Peak Ground Acceleration (PGA) datasets
+    - [x] 26.2 Map micro-zonation risks to municipalities (Implemented IDW Interpolation of 22 Reference Cities)
+    - [x] 26.3 Ingest ISPRA Flood/Landslide Risk Maps (Implemented Manual Ingestion of Critical Zones)
+- [x] STEP 27: REAL-TIME MARKET PULSE
+    - [x] 27.1 Develop production-ready scraper for live listing portals (Casa.it)
+        - [x] Base scraper with enterprise anti-detection (TLS fingerprinting, proxy rotation)
+        - [x] Italian rotating proxies + US sticky backup with failover
+        - [x] Casa.it specific scraper with adaptive CSS selectors
+        - [x] Listing ingestor with upsert/deduplication logic
+        - [x] MarketPulseService for real-time metrics
+        - [x] CLI with parallel processing, checkpoint/resume support
+        - [x] Italian date parsing (oggi, ieri, X giorni fa, etc.)
+        - [x] Detail page scraper for additional property data
+        - [x] Unit tests for proxy rotation, HTML parsing, market metrics
+    - [x] 27.2 Aggregate "Active Listings" vs "Sold" metrics
+        - [x] Active listings count per municipality
+        - [x] Median days on market (DOM)
+        - [x] Absorption rate (30-day window)
+        - [x] Inventory months calculation
+        - [x] Average price per sqm
+- [ ] STEP 28: SYSTEM STABILITY & ACCURACY
+    - [x] 28.1 Complete Centroid Resolution (Geocoding for all 7895 municipalities - COMPLETED)
+    - [ ] 28.2 Consistency Audit: Ensure 0.1s-0.5s throttling across all ingestion loops
+    - [ ] 28.3 Memory Usage Optimization: Review survival mode limits
+- [ ] STEP 29: ADVANCED UI & TRANSPARENCY
+    - [ ] 29.1 Implement Integrated Investment Dashboard
+    - [ ] 29.2 Add Data Reliability & Confidence Badges to all UI Cards
+
+## PHASE 7: SECURITY AUDIT & REMEDIATION (IN PROGRESS)
+- [x] STEP 30: COMPREHENSIVE PROJECT AUDIT & SECURITY HARDENING
+    - [x] 30.1 Conduct Deep Audit of Backend, Frontend, and DevOps (Identified 15+ Vulnerabilities)
+    - [x] 30.2 Phase 1: Security Hardening
+        - [x] Rotate all default credentials in `.env`
+        - [x] Enforce explicit environment variables in `docker-compose.yml`
+        - [x] Implement real database connectivity health checks
+        - [x] Restrict CORS to explicit HTTP methods
+    - [x] 30.3 Phase 2: Core Stability Fixes
+        - [x] Implement production-ready connection pooling (QueuePool)
+        - [x] Fix thread-safety in ScoringEngine and SimpleTTLCache
+        - [x] Replace bare `except:` clauses with specific exception handlers
+    - [x] 30.4 Phase 3: Testing Infrastructure
+        - [x] Setup PostgreSQL/PostGIS test container (`docker-compose.test.yml`)
+        - [x] Implement PostGIS-based spatial query integration tests
+        - [x] Implement ScoringEngine edge-case and consistency tests
+- [ ] STEP 31: CODE QUALITY & REFACTORING
+    - [ ] 31.1 Extract magic numbers to configuration constants
+    - [ ] 31.2 Implement standardized logging across all modules
+    - [ ] 31.3 Add OpenAPI/Docstring documentation for all endpoints
+- [ ] STEP 32: PERFORMANCE PIPELINE
+    - [ ] 32.1 Convert geocoding to asynchronous pattern
+    - [ ] 32.2 Implement real-time listing scraper (Step 27)

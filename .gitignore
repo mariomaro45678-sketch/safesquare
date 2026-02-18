@@ -1,0 +1,68 @@
+# Logs and large data files
+*.txt
+*.log
+*.csv
+*.xlsx
+*.xls
+*.json
+*.geojson
+*.db
+*.sqlite
+*.sqlite3
+*.sql
+
+# Media/binary
+*.html
+*.html.bak
+*_files/
+*.pdf
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.ico
+*.svg
+*.mp4
+*.avi
+*.mkv
+*.zip
+*.tar.gz
+*.tar.bz2
+*.7z
+*.gz
+*.rar
+*.bin
+*.pack
+
+# Node
+node_modules/
+.npm/
+npm-debug.log*
+yarn-debug.log*
+.next/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+venv/
+env/
+.venv/
+
+# Environment secrets
+.env
+.env.*
+*.session
+*.session-journal
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db

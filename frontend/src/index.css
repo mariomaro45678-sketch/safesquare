@@ -1,0 +1,552 @@
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.6;
+    color: #1a202c;
+    background-color: #f9fafb;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+/* ============================================
+   CUSTOM UTILITY CLASSES
+   ============================================ */
+
+@layer utilities {
+
+    /* Glassmorphism */
+    .glass {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .glass-dark {
+        background: rgba(17, 24, 39, 0.8);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .glass-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+    }
+
+    /* Text Gradients */
+    .text-gradient-primary {
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .text-gradient-success {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    /* Hover Effects */
+    .hover-lift {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .hover-lift:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
+    }
+
+    .hover-scale {
+        transition: transform 0.2s ease;
+    }
+
+    .hover-scale:hover {
+        transform: scale(1.02);
+    }
+
+    /* Animation Delays */
+    .animation-delay-200 {
+        animation-delay: 200ms;
+    }
+
+    .animation-delay-400 {
+        animation-delay: 400ms;
+    }
+
+    .animation-delay-600 {
+        animation-delay: 600ms;
+    }
+
+    .animation-delay-1000 {
+        animation-delay: 1000ms;
+    }
+
+    .animation-delay-2000 {
+        animation-delay: 2000ms;
+    }
+
+    .animation-delay-4000 {
+        animation-delay: 4000ms;
+    }
+
+    /* Focus Ring */
+    .focus-ring {
+        @apply focus:outline-none focus:ring-4 focus:ring-primary-100 focus:border-primary-500;
+    }
+
+    /* No Scrollbar */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    /* Premium Card Hover */
+    .card-interactive {
+        @apply transition-all duration-300 ease-out;
+    }
+
+    .card-interactive:hover {
+        @apply shadow-lg -translate-y-1;
+    }
+}
+
+/* ============================================
+   CUSTOM SCROLLBAR
+   ============================================ */
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #94a3b8 0%, #64748b 100%);
+    border-radius: 4px;
+    border: 2px solid #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #64748b 0%, #475569 100%);
+}
+
+/* Custom scrollbar for dark sections */
+.dark-scroll::-webkit-scrollbar-track {
+    background: #1e293b;
+}
+
+.dark-scroll::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #475569 0%, #334155 100%);
+    border-color: #1e293b;
+}
+
+/* ============================================
+   LEAFLET MAP OVERRIDES
+   ============================================ */
+
+.leaflet-container {
+    height: 100%;
+    width: 100%;
+    font-family: 'Inter', sans-serif;
+    background: #e5e7eb;
+}
+
+.leaflet-popup-content-wrapper {
+    border-radius: 16px;
+    padding: 0;
+    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.leaflet-popup-content {
+    margin: 0;
+    min-width: 220px;
+}
+
+.leaflet-popup-tip {
+    background: white;
+    box-shadow: none;
+}
+
+.leaflet-control-zoom {
+    border: none !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
+    border-radius: 12px !important;
+    overflow: hidden;
+}
+
+.leaflet-control-zoom a {
+    background: white !important;
+    color: #1a202c !important;
+    border: none !important;
+    width: 36px !important;
+    height: 36px !important;
+    line-height: 36px !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+}
+
+.leaflet-control-zoom a:hover {
+    background: #f8fafc !important;
+    color: #2563eb !important;
+}
+
+.leaflet-control-attribution {
+    background: rgba(255, 255, 255, 0.8) !important;
+    backdrop-filter: blur(8px);
+    border-radius: 6px 0 0 0;
+    padding: 4px 8px !important;
+    font-size: 10px !important;
+}
+
+/* ============================================
+   MARKER ANIMATIONS
+   ============================================ */
+
+@keyframes marker-pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6);
+    }
+
+    70% {
+        transform: scale(1.05);
+        box-shadow: 0 0 0 20px rgba(16, 185, 129, 0);
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    }
+}
+
+@keyframes marker-pulse-warning {
+    0% {
+        box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.5);
+    }
+
+    70% {
+        box-shadow: 0 0 0 15px rgba(245, 158, 11, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(245, 158, 11, 0);
+    }
+}
+
+.pulse-green {
+    animation: marker-pulse 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.pulse-yellow {
+    animation: marker-pulse-warning 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes marker-pop {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.marker-appear {
+    /* DO NOT use transform here - it breaks Leaflet's position */
+    opacity: 0;
+    animation: fadeIn 0.4s ease forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* ============================================
+   SKELETON LOADING
+   ============================================ */
+
+@keyframes skeleton-shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.skeleton {
+    background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.5s ease-in-out infinite;
+    border-radius: 8px;
+}
+
+.skeleton-text {
+    @apply skeleton h-4 rounded;
+}
+
+.skeleton-title {
+    @apply skeleton h-8 rounded w-3/4;
+}
+
+.skeleton-avatar {
+    @apply skeleton rounded-full;
+}
+
+.skeleton-card {
+    @apply skeleton rounded-2xl;
+}
+
+/* ============================================
+   CHART STYLING
+   ============================================ */
+
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+    stroke: #e5e7eb;
+    stroke-dasharray: 4 4;
+}
+
+.recharts-tooltip-wrapper {
+    filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.1));
+}
+
+.recharts-default-tooltip {
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(8px);
+    border: 1px solid #e5e7eb !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
+    padding: 12px 16px !important;
+}
+
+/* ============================================
+   BADGE STYLES
+   ============================================ */
+
+.badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider;
+}
+
+.badge-success {
+    @apply bg-success-100 text-success-700;
+}
+
+.badge-warning {
+    @apply bg-warning-100 text-warning-600;
+}
+
+.badge-danger {
+    @apply bg-danger-100 text-danger-700;
+}
+
+.badge-primary {
+    @apply bg-primary-100 text-primary-700;
+}
+
+.badge-neutral {
+    @apply bg-gray-100 text-gray-700;
+}
+
+/* ============================================
+   BUTTON STYLES
+   ============================================ */
+
+.btn {
+    @apply inline-flex items-center justify-center px-6 py-3 font-semibold rounded-xl transition-all duration-200 focus:outline-none focus:ring-4;
+}
+
+.btn-primary {
+    @apply bg-primary-600 text-white hover:bg-primary-700 active:scale-[0.98] focus:ring-primary-200 shadow-lg shadow-primary-600/25;
+}
+
+.btn-secondary {
+    @apply bg-white text-gray-700 border-2 border-gray-200 hover:bg-gray-50 hover:border-gray-300 focus:ring-gray-200;
+}
+
+.btn-ghost {
+    @apply bg-transparent text-gray-600 hover:bg-gray-100 hover:text-gray-900 focus:ring-gray-200;
+}
+
+.btn-success {
+    @apply bg-success-600 text-white hover:bg-success-700 focus:ring-success-200 shadow-lg shadow-success-600/25;
+}
+
+.btn-danger {
+    @apply bg-danger-600 text-white hover:bg-danger-700 focus:ring-danger-200 shadow-lg shadow-danger-600/25;
+}
+
+.btn-sm {
+    @apply px-4 py-2 text-sm rounded-lg;
+}
+
+.btn-lg {
+    @apply px-8 py-4 text-lg rounded-2xl;
+}
+
+/* ============================================
+   FORM INPUTS
+   ============================================ */
+
+.input {
+    @apply w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 transition-all duration-200;
+    @apply focus:outline-none focus:ring-4 focus:ring-primary-100 focus:border-primary-500;
+    @apply hover:border-gray-300;
+}
+
+.input-lg {
+    @apply px-5 py-4 text-lg rounded-2xl;
+}
+
+/* ============================================
+   CARD STYLES
+   ============================================ */
+
+.card {
+    @apply bg-white rounded-3xl border border-gray-100 shadow-sm;
+}
+
+.card-hover {
+    @apply card transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+}
+
+.card-glass {
+    @apply rounded-3xl glass-card;
+}
+
+/* ============================================
+   SCORE COLORS
+   ============================================ */
+
+.score-excellent {
+    @apply text-success-600;
+}
+
+.score-good {
+    @apply text-success-500;
+}
+
+.score-moderate {
+    @apply text-warning-500;
+}
+
+.score-low {
+    @apply text-warning-600;
+}
+
+.score-risk {
+    @apply text-danger-600;
+}
+
+.score-bg-excellent {
+    @apply bg-success-50 border-success-200;
+}
+
+.score-bg-good {
+    @apply bg-success-50/50 border-success-100;
+}
+
+.score-bg-moderate {
+    @apply bg-warning-50 border-warning-200;
+}
+
+.score-bg-low {
+    @apply bg-warning-50/50 border-warning-100;
+}
+
+.score-bg-risk {
+    @apply bg-danger-50 border-danger-200;
+}
+
+/* ============================================
+   RESPONSIVE UTILITIES
+   ============================================ */
+
+@media (max-width: 768px) {
+    html {
+        font-size: 14px;
+    }
+
+    .hide-mobile {
+        display: none !important;
+    }
+}
+
+@media (min-width: 769px) {
+    .hide-desktop {
+        display: none !important;
+    }
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+
+@media print {
+    .no-print {
+        display: none !important;
+    }
+
+    body {
+        background: white;
+    }
+
+    .card {
+        box-shadow: none;
+        border: 1px solid #e5e7eb;
+    }
+}
