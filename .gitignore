@@ -29,7 +29,7 @@
 *.tar.gz
 *.tar.bz2
 *.7z
-*.gz
+# *.gz (allow database_backup.sql.gz)
 *.rar
 *.bin
 *.pack
