@@ -1,6 +1,3 @@
-from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy.orm import Session
-from sqlalchemy import func, and_, desc
 from typing import List, Optional
 from app.api.schemas.location import (
     LocationSearchRequest,
@@ -104,10 +101,21 @@ async def search_location(
         # Add municipality if found
         if result['municipality']:
             muni_data = result['municipality']
-            # Fetch the full object to get relationships if needed, 
-            # or just use the IDs from the geocoder result
             muni = db.query(Municipality).filter(Municipality.id == muni_data['id']).first()
             if muni:
+                # Fetch the latest municipality-level investment score so the
+                # search result map marker shows the real score (not hardcoded 5.0)
+                latest_score_row = (
+                    db.query(InvestmentScore.overall_score)
+                    .filter(
+                        InvestmentScore.municipality_id == muni.id,
+                        InvestmentScore.omi_zone_id == None,
+                    )
+                    .order_by(InvestmentScore.calculation_date.desc())
+                    .first()
+                )
+                investment_score = latest_score_row[0] if latest_score_row else None
+
                 response.municipality = MunicipalityResponse(
                     id=muni.id,
                     name=muni.name,
@@ -117,6 +125,7 @@ async def search_location(
                     population=muni.population,
                     area_sqkm=muni.area_sqkm,
                     postal_codes=muni.postal_codes,
+                    investment_score=investment_score,
                     coordinates=CoordinatesResponse(
                         latitude=to_shape(muni.centroid).y,
                         longitude=to_shape(muni.centroid).x

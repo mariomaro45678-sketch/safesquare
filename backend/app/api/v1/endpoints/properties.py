@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
-from sqlalchemy import desc
+from sqlalchemy import desc, func
 from typing import List, Optional, Dict, Any
 from app.core.database import get_db
 from app.models.property import PropertyPrice, PropertyType, TransactionType
@@ -64,7 +64,7 @@ def get_omi_zone_prices(
         
     return prices
 
-@router.get("/prices/municipality/{municipality_id}", response_model=List[PropertyPriceResponse])
+@router.get("/prices/municipality/{municipality_id}", response_model=List[Dict[str, Any]])
 def get_municipality_prices(
     municipality_id: int,
     property_type: PropertyTypeEnum = PropertyTypeEnum.RESIDENTIAL,
@@ -73,50 +73,69 @@ def get_municipality_prices(
     db: Session = Depends(get_db)
 ):
     """
-    Get aggregated property prices for a municipality (across all OMI zones).
-    
-    Provides comprehensive market overview by aggregating prices from all OMI zones
-    within a municipality. Useful for understanding overall municipal real estate trends.
-    
+    Get time-series property prices for a municipality, aggregated across all OMI zones.
+
+    Returns one data point per (year, semester) period representing the average,
+    minimum and maximum sale price across all zones — suitable for trend charts.
+    Results are returned oldest-first so charts render chronologically.
+
     **Parameters:**
     - **municipality_id**: Unique identifier of the municipality
     - **property_type**: Filter by property type (default: residential)
     - **transaction_type**: Filter by transaction type (default: sale)
-    - **limit**: Maximum number of zone records to return (default: 20)
-    
-    **Returns:**
-    - Aggregated price data across all zones in the municipality
-    - Includes zone-level breakdowns for detailed analysis
-    
+    - **limit**: Maximum number of distinct time periods to return (default: 20)
+
     **Example Response:**
     ```json
     [
-      {
-        "year": 2024,
-        "avg_price": 2900,
-        "omi_zone_code": "C1",
-        "municipality_name": "Roma"
-      },
-      {
-        "year": 2024,
-        "avg_price": 4100,
-        "omi_zone_code": "A1",
-        "municipality_name": "Roma"
-      }
+      {"year": 2020, "semester": 1, "avg_price": 2850, "min_price": 1800, "max_price": 5200, "zone_count": 12},
+      {"year": 2020, "semester": 2, "avg_price": 2900, "min_price": 1850, "max_price": 5300, "zone_count": 12}
     ]
     ```
     """
-    prices = db.query(PropertyPrice).join(OMIZone).filter(
-        OMIZone.municipality_id == municipality_id,
-        PropertyPrice.property_type == property_type,
-        PropertyPrice.transaction_type == transaction_type
-    ).order_by(desc(PropertyPrice.year), desc(PropertyPrice.semester)).limit(limit).all()
-    
-    for p in prices:
-        p.omi_zone_code = p.omi_zone.zone_code
-        p.municipality_name = p.omi_zone.municipality.name
-        
-    return prices
+    muni = db.query(Municipality).filter(Municipality.id == municipality_id).first()
+    if not muni:
+        raise HTTPException(status_code=404, detail="Municipality not found")
+
+    # Aggregate across all OMI zones by (year, semester) — one row per time period
+    rows = (
+        db.query(
+            PropertyPrice.year,
+            PropertyPrice.semester,
+            func.avg(PropertyPrice.avg_price).label("avg_price"),
+            func.min(PropertyPrice.min_price).label("min_price"),
+            func.max(PropertyPrice.max_price).label("max_price"),
+            func.count(PropertyPrice.id).label("zone_count"),
+        )
+        .join(OMIZone)
+        .filter(
+            OMIZone.municipality_id == municipality_id,
+            PropertyPrice.property_type == property_type,
+            PropertyPrice.transaction_type == transaction_type,
+            PropertyPrice.avg_price > 0,
+        )
+        .group_by(PropertyPrice.year, PropertyPrice.semester)
+        .order_by(desc(PropertyPrice.year), desc(PropertyPrice.semester))
+        .limit(limit)
+        .all()
+    )
+
+    # Return oldest-first so the frontend chart renders left-to-right chronologically
+    result = [
+        {
+            "year": row.year,
+            "semester": row.semester,
+            "avg_price": round(float(row.avg_price), 2) if row.avg_price else 0,
+            "min_price": round(float(row.min_price), 2) if row.min_price else 0,
+            "max_price": round(float(row.max_price), 2) if row.max_price else 0,
+            "zone_count": row.zone_count,
+            "municipality_name": muni.name,
+            "omi_zone_code": "ALL",
+        }
+        for row in rows
+    ]
+    result.reverse()  # oldest first
+    return result
 
 @router.get("/statistics/municipality/{municipality_id}", response_model=Dict[str, Any])
 def get_municipality_statistics(

@@ -35,6 +35,11 @@ def read_root():
 def health_check():
     return {"status": "healthy"}
 
+@app.get("/api/v1/health")
+def api_v1_health():
+    """Health check accessible under the /api/v1 prefix (used by frontend)."""
+    return {"status": "healthy"}
+
 @app.get("/api/v1/health/detailed")
 def detailed_health_check():
     """
